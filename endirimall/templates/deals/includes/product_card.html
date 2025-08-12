@@ -1,0 +1,147 @@
+{% load static %}
+{% load i18n %}
+
+<div class="card h-100 product-card position-relative">
+    <!-- Discount badge -->
+    {% if product.discount_percentage > 0 %}
+    <div class="position-absolute top-0 start-0 m-2">
+        <span class="badge bg-danger fs-6">-{{ product.discount_percentage }}%</span>
+    </div>
+    {% endif %}
+    
+    <!-- Favorite button -->
+    {% if user.is_authenticated %}
+    <button class="btn btn-link position-absolute top-0 end-0 m-2 p-1 favorite-btn" 
+            data-product-id="{{ product.id }}" 
+            data-favorited="{% if product.id in user.favorites.values_list 'product_id' flat %}true{% else %}false{% endif %}">
+        <i class="bi bi-heart{% if product.id in user.favorites.values_list:'product_id',flat %}-fill text-danger{% endif %} fs-5"></i>
+    </button>
+    {% endif %}
+    
+    <!-- Product image -->
+    <div class="card-img-wrapper">
+        <a href="{{ product.get_absolute_url }}">
+            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.title }}" 
+                 style="height: 200px; object-fit: cover;">
+        </a>
+    </div>
+    
+    <!-- Product details -->
+    <div class="card-body d-flex flex-column">
+        <!-- Store name -->
+        <div class="mb-2">
+            <a href="{{ product.store.get_absolute_url }}" class="text-muted text-decoration-none small">
+                <i class="bi bi-shop me-1"></i>{{ product.store.name }}
+            </a>
+        </div>
+        
+        <!-- Product title -->
+        <h6 class="card-title">
+            <a href="{{ product.get_absolute_url }}" class="text-decoration-none text-dark">
+                {{ product.title|truncatechars:50 }}
+            </a>
+        </h6>
+        
+        <!-- Category -->
+        <div class="mb-2">
+            <a href="{{ product.category.get_absolute_url }}" class="text-muted text-decoration-none small">
+                {% if product.category.icon %}
+                    <i class="bi bi-{{ product.category.icon }} me-1"></i>
+                {% endif %}
+                {{ product.category.name }}
+            </a>
+        </div>
+        
+        <!-- Prices -->
+        <div class="mt-auto">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <span class="h6 text-success fw-bold mb-0">${{ product.discounted_price }}</span>
+                    {% if product.original_price != product.discounted_price %}
+                        <br><small class="text-muted text-decoration-line-through">${{ product.original_price }}</small>
+                    {% endif %}
+                </div>
+                {% if product.get_savings > 0 %}
+                <small class="text-success">
+                    {% trans "Save" %} ${{ product.get_savings|floatformat:2 }}
+                </small>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Deal expiry -->
+        {% if product.valid_until %}
+        <div class="mt-2">
+            <small class="text-warning">
+                <i class="bi bi-clock me-1"></i>
+                {% trans "Expires" %}: {{ product.valid_until|date:"M d, Y" }}
+            </small>
+        </div>
+        {% endif %}
+        
+        <!-- Action buttons -->
+        <div class="mt-3 d-grid gap-2">
+            <a href="{{ product.deal_url }}" target="_blank" class="btn btn-primary btn-sm">
+                <i class="bi bi-bag me-1"></i>{% trans "Get Deal" %}
+            </a>
+            <a href="{{ product.get_absolute_url }}" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-eye me-1"></i>{% trans "View Details" %}
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+.product-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #e9ecef;
+}
+
+.product-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.favorite-btn {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.favorite-btn:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.1);
+}
+
+.card-img-wrapper {
+    overflow: hidden;
+}
+
+.card-img-wrapper:hover img {
+    transform: scale(1.05);
+}
+
+.card-img-top {
+    transition: transform 0.3s ease;
+}
+
+@media (max-width: 576px) {
+    .card-img-top {
+        height: 150px;
+    }
+    
+    .card-title {
+        font-size: 0.9rem;
+    }
+    
+    .btn-sm {
+        font-size: 0.8rem;
+        padding: 0.25rem 0.5rem;
+    }
+}
+</style>

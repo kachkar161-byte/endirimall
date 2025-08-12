@@ -1,0 +1,23 @@
+Django==4.2
+Pillow==10.1.0
+psycopg2-binary==2.9.9
+
+# Optional: For production deployment
+gunicorn==21.2.0
+whitenoise==6.6.0
+
+# Optional: For development
+django-debug-toolbar==4.2.0
+
+# Optional: For caching (Redis)
+django-redis==5.4.0
+redis==5.0.1
+
+# Optional: For better admin interface
+django-admin-interface==0.21.0
+
+# Optional: For API development (if needed later)
+djangorestframework==3.14.0
+
+# Optional: For environment variables
+python-decouple==3.8
