@@ -1,0 +1,1 @@
+# Endirimall - Discount Aggregator Platform

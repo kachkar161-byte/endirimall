@@ -1,0 +1,243 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans 'Haqqımızda' %}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Hero Section -->
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <h1 class="display-4 fw-bold text-primary mb-4">
+                {% trans 'Endirimall Haqqında' %}
+            </h1>
+            <p class="lead text-muted">
+                {% trans 'Azərbaycanda ən yaxşı endirimlər və endirim kodları üçün etibarlı mənbə' %}
+            </p>
+        </div>
+    </div>
+
+    <!-- Mission Section -->
+    <div class="row mb-5">
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100 border-0 shadow">
+                <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        <i class="bi bi-target text-primary" style="font-size: 3rem;"></i>
+                    </div>
+                    <h3 class="card-title text-center mb-3">{% trans 'Missiyamız' %}</h3>
+                    <p class="card-text text-muted">
+                        {% trans 'Endirimall olaraq missiyamız Azərbaycan istifadəçilərinə ən yaxşı endirimləri və endirim kodlarını təqdim etməkdir. Biz hər gün yüzlərlə mağazadan məlumat toplayaraq, istifadəçilərimizə ən böyük qənaəti təmin edirik.' %}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100 border-0 shadow">
+                <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        <i class="bi bi-eye text-success" style="font-size: 3rem;"></i>
+                    </div>
+                    <h3 class="card-title text-center mb-3">{% trans 'Vizyonumuz' %}</h3>
+                    <p class="card-text text-muted">
+                        {% trans 'Azərbaycanın ən böyük və etibarlı endirim platforması olmaq. İstifadəçilərimizin hər alış-verişdə qənaət etməsini təmin etmək və mağazaların endirimlərini daha geniş auditoriyaya çatdırmaq.' %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Values Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="text-center mb-5">{% trans 'Dəyərlərimiz' %}</h2>
+            <div class="row">
+                <div class="col-md-3 mb-4">
+                    <div class="text-center">
+                        <i class="bi bi-shield-check text-primary mb-3" style="font-size: 2.5rem;"></i>
+                        <h5>{% trans 'Etibarlılıq' %}</h5>
+                        <p class="text-muted small">
+                            {% trans 'Yalnız təsdiqlənmiş və etibarlı məlumatları təqdim edirik' %}
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="text-center">
+                        <i class="bi bi-lightning text-warning mb-3" style="font-size: 2.5rem;"></i>
+                        <h5>{% trans 'Sürət' %}</h5>
+                        <p class="text-muted small">
+                            {% trans 'Endirimlər real vaxtda yenilənir və paylaşılır' %}
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="text-center">
+                        <i class="bi bi-people text-success mb-3" style="font-size: 2.5rem;"></i>
+                        <h5>{% trans 'İstifadəçi fokusu' %}</h5>
+                        <p class="text-muted small">
+                            {% trans 'İstifadəçi təcrübəsi bizim üçün ən vacibdir' %}
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="text-center">
+                        <i class="bi bi-globe text-info mb-3" style="font-size: 2.5rem;"></i>
+                        <h5>{% trans 'İnnovasiya' %}</h5>
+                        <p class="text-muted small">
+                            {% trans 'Texnologiya ilə endirim axtarışını asanlaşdırırıq' %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Team Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="text-center mb-5">{% trans 'Komandamız' %}</h2>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card text-center border-0 shadow">
+                        <div class="card-body p-4">
+                            <div class="team-avatar mb-3">
+                                <i class="bi bi-person-circle text-primary" style="font-size: 4rem;"></i>
+                            </div>
+                            <h5 class="card-title">{% trans 'Əli Məmmədov' %}</h5>
+                            <p class="text-muted">{% trans 'CEO & Founder' %}</p>
+                            <p class="card-text small">
+                                {% trans '10 ildən artıq təcrübə ilə e-ticarət sahəsində fəaliyyət göstərir.' %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card text-center border-0 shadow">
+                        <div class="card-body p-4">
+                            <div class="team-avatar mb-3">
+                                <i class="bi bi-person-circle text-primary" style="font-size: 4rem;"></i>
+                            </div>
+                            <h5 class="card-title">{% trans 'Aysu Əliyeva' %}</h5>
+                            <p class="text-muted">{% trans 'CTO' %}</p>
+                            <p class="card-text small">
+                                {% trans 'Texnologiya sahəsində mütəxəssis və platforma inkişafının rəhbəri.' %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card text-center border-0 shadow">
+                        <div class="card-body p-4">
+                            <div class="team-avatar mb-3">
+                                <i class="bi bi-person-circle text-primary" style="font-size: 4rem;"></i>
+                            </div>
+                            <h5 class="card-title">{% trans 'Rəşad Hüseynov' %}</h5>
+                            <p class="text-muted">{% trans 'Marketing Manager' %}</p>
+                            <p class="card-text small">
+                                {% trans 'Rəqəmsal marketinq və istifadəçi əlaqələri sahəsində təcrübəli mütəxəssis.' %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card bg-primary text-white">
+                <div class="card-body text-center py-5">
+                    <h3 class="mb-4">{% trans 'Nailiyyətlərimiz' %}</h3>
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <div class="stat-item">
+                                <h2 class="fw-bold">1000+</h2>
+                                <p class="mb-0">{% trans 'Aktiv mağaza' %}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="stat-item">
+                                <h2 class="fw-bold">50,000+</h2>
+                                <p class="mb-0">{% trans 'Endirim məhsulu' %}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="stat-item">
+                                <h2 class="fw-bold">100,000+</h2>
+                                <p class="mb-0">{% trans 'Məmnun istifadəçi' %}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="stat-item">
+                                <h2 class="fw-bold">1M+</h2>
+                                <p class="mb-0">{% trans 'Aylıq ziyarət' %}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact CTA -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card bg-light text-center">
+                <div class="card-body py-5">
+                    <h3 class="mb-3">{% trans 'Bizimlə Əlaqə Saxlayın' %}</h3>
+                    <p class="text-muted mb-4">
+                        {% trans 'Suallarınız və ya təklifləriniz üçün bizimlə əlaqə saxlayın. Komandamız sizə kömək etməkdən məmnuniyyət duyacaq.' %}
+                    </p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="{% url 'core:contact' %}" class="btn btn-primary btn-lg">
+                            <i class="bi bi-envelope me-2"></i>{% trans 'Əlaqə' %}
+                        </a>
+                        <a href="{% url 'core:home' %}" class="btn btn-outline-primary btn-lg">
+                            <i class="bi bi-house me-2"></i>{% trans 'Ana Səhifə' %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.team-avatar {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--light-color);
+    border-radius: 50%;
+}
+
+.stat-item h2 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+}
+
+.bi {
+    transition: transform 0.3s ease;
+}
+
+.card:hover .bi {
+    transform: scale(1.1);
+}
+</style>
+{% endblock %}
