@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{{ product.name }} - Endirimall{% endblock %}
+
+{% block content %}
+  <div class="row g-4">
+    <div class="col-md-6">
+      <img src="{{ product.image.url }}" class="img-fluid rounded" alt="{{ product.name }}">
+    </div>
+    <div class="col-md-6">
+      <h1 class="h3">{{ product.name }}</h1>
+      <p class="text-muted">{{ product.store.name }}{% if product.category %} · {{ product.category.name }}{% endif %}</p>
+      <div class="mb-3">
+        <span class="h4">{{ product.discounted_price }} ₼</span>
+        <span class="text-decoration-line-through text-muted">{{ product.original_price }} ₼</span>
+        <span class="badge bg-success">-{{ product.discount_percentage }}%</span>
+      </div>
+      {% if user.is_authenticated %}
+        <form method="post" action="{% url 'deals:toggle_favorite' product.id %}" class="d-inline" onsubmit="return toggleFav(event, {{ product.id }});">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-outline-danger">
+            <i class="bi {% if is_favorite %}bi-heart-fill{% else %}bi-heart{% endif %}"></i>
+            {% if is_favorite %}{% trans 'Remove from favorites' %}{% else %}{% trans 'Add to favorites' %}{% endif %}
+          </button>
+        </form>
+      {% else %}
+        <a href="{% url 'accounts:login' %}" class="btn btn-outline-danger"><i class="bi bi-heart"></i> {% trans 'Login to save' %}</a>
+      {% endif %}
+      <hr>
+      <p>{{ product.description }}</p>
+    </div>
+  </div>
+{% endblock %}

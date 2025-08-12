@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans 'Profile' %} - Endirimall{% endblock %}
+
+{% block content %}
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-body">
+          <h1 class="h4 mb-3">{% trans 'Your Profile' %}</h1>
+          <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-primary" type="submit">{% trans 'Save' %}</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
