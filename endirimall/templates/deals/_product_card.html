@@ -1,0 +1,32 @@
+{% load i18n static %}
+<div class="card h-100">
+  <a href="{{ product.get_absolute_url }}" class="text-decoration-none text-dark">
+    <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+  </a>
+  <div class="card-body d-flex flex-column">
+    <h6 class="card-title mb-1 text-truncate">{{ product.name }}</h6>
+    <div class="mb-2 small text-muted">{{ product.store.name }}{% if product.category %} · {{ product.category.name }}{% endif %}</div>
+    <div class="mt-auto d-flex align-items-center justify-content-between">
+      <div>
+        <span class="fw-bold">{{ product.discounted_price }} ₼</span>
+        <span class="text-decoration-line-through text-muted small">{{ product.original_price }} ₼</span>
+      </div>
+      <span class="badge bg-success">-{{ product.discount_percentage }}%</span>
+    </div>
+  </div>
+  <div class="card-footer bg-white border-0 d-flex justify-content-end">
+    {% if user.is_authenticated %}
+      {% with is_fav=product.id in favorites %}
+      <button
+        class="btn btn-sm btn-light favorite-toggle"
+        data-product-id="{{ product.id }}"
+        aria-label="{% trans 'Toggle favorite' %}"
+      >
+        <i class="bi {% if is_fav %}bi-heart-fill text-danger{% else %}bi-heart{% endif %}"></i>
+      </button>
+      {% endwith %}
+    {% else %}
+      <a href="{% url 'accounts:login' %}" class="btn btn-sm btn-light" title="{% trans 'Login to save' %}"><i class="bi bi-heart"></i></a>
+    {% endif %}
+  </div>
+</div>

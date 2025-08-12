@@ -1,0 +1,2 @@
+#searchResults{ max-height: 400px; overflow-y: auto; }
+.card img{ object-fit: cover; height: 160px; }

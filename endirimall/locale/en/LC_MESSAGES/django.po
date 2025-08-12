@@ -1,0 +1,39 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: endirimall\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+
+#: templates/includes/navbar.html:9
+msgid "Products"
+msgstr "Products"
+
+#: templates/core/home.html:26
+msgid "Latest Deals"
+msgstr "Latest Deals"
+
+#: templates/accounts/login.html:6
+msgid "Login"
+msgstr "Login"
+
+#: templates/accounts/register.html:6
+msgid "Register"
+msgstr "Register"
+
+#: templates/accounts/profile.html:6
+msgid "Profile"
+msgstr "Profile"
+
+#: templates/deals/product_list.html:7
+msgid "All Categories"
+msgstr "All Categories"
+
+#: templates/deals/product_list.html:13
+msgid "Stores"
+msgstr "Stores"
+
+#: templates/deals/product_list.html:24
+msgid "No products found."
+msgstr "No products found."

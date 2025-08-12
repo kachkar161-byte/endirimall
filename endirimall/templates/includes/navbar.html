@@ -1,0 +1,47 @@
+{% load i18n static %}
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="/{% get_current_language %}/">Endirimall</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link" href="{% url 'deals:product_list' %}">{% trans 'Products' %}</a></li>
+      </ul>
+      <form class="d-flex position-relative me-3" role="search" onsubmit="return false;">
+        <input id="searchInput" class="form-control" type="search" placeholder="{% trans 'Search by product, store or category' %}" aria-label="Search">
+        <div id="searchResults" class="position-absolute bg-white shadow rounded w-100 mt-2" style="z-index:1000; display:none;"></div>
+      </form>
+      <ul class="navbar-nav mb-2 mb-lg-0 align-items-center">
+        {% if user.is_authenticated %}
+          <li class="nav-item me-2">
+            <span class="badge text-bg-primary"><i class="bi bi-heart-fill"></i> {{ favorite_count }}</span>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'accounts:profile' %}"><i class="bi bi-person-circle"></i> {{ user.username }}</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'accounts:logout' %}">{% trans 'Logout' %}</a></li>
+        {% else %}
+          <li class="nav-item"><a class="nav-link" href="{% url 'accounts:login' %}">{% trans 'Login' %}</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'accounts:register' %}">{% trans 'Register' %}</a></li>
+        {% endif %}
+        <li class="nav-item dropdown ms-2">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {% get_current_language as LANGUAGE_CODE %}
+            {{ LANGUAGE_CODE|upper }}
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li>
+              <form action="/i18n/setlang/" method="post" class="px-3 py-1">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.path }}">
+                <button class="dropdown-item" name="language" value="az" type="submit">AZ</button>
+                <button class="dropdown-item" name="language" value="en" type="submit">EN</button>
+                <button class="dropdown-item" name="language" value="ru" type="submit">RU</button>
+              </form>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

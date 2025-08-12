@@ -1,0 +1,6 @@
+{% load i18n %}
+<form action="{% url 'marketing:subscribe' %}" method="post" class="d-flex gap-2">
+  {% csrf_token %}
+  <input type="email" name="email" class="form-control" placeholder="{% trans 'Your email for best deals' %}" required>
+  <button class="btn btn-primary" type="submit">{% trans 'Subscribe' %}</button>
+</form>
