@@ -1,0 +1,321 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">{% trans 'Ana Səhifə' %}</a></li>
+            <li class="breadcrumb-item"><a href="{{ product.category.get_absolute_url }}">{{ product.category.name }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <!-- Product Images -->
+        <div class="col-lg-6 mb-4">
+            <div class="product-images">
+                <div class="main-image mb-3">
+                    <img src="{{ product.main_image.url }}" class="img-fluid rounded" alt="{{ product.name }}" id="mainImage">
+                </div>
+                
+                {% if product.additional_images %}
+                <div class="thumbnail-images d-flex gap-2">
+                    <div class="thumbnail-item">
+                        <img src="{{ product.main_image.url }}" class="img-thumbnail thumbnail-img active" 
+                             alt="{{ product.name }}" data-src="{{ product.main_image.url }}">
+                    </div>
+                    {% for image in product.additional_images %}
+                    <div class="thumbnail-item">
+                        <img src="{{ image }}" class="img-thumbnail thumbnail-img" 
+                             alt="{{ product.name }}" data-src="{{ image }}">
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Product Info -->
+        <div class="col-lg-6">
+            <div class="product-info">
+                <h1 class="h2 mb-3">{{ product.name }}</h1>
+                
+                <!-- Store Info -->
+                <div class="store-info mb-3">
+                    <span class="text-muted">{% trans 'Mağaza:' %}</span>
+                    <a href="{{ product.store.get_absolute_url }}" class="text-decoration-none">
+                        <strong>{{ product.store.name }}</strong>
+                    </a>
+                </div>
+
+                <!-- Pricing -->
+                <div class="pricing mb-4">
+                    <div class="d-flex align-items-center gap-3 mb-2">
+                        <span class="text-decoration-line-through text-muted fs-5">
+                            {{ product.original_price }} ₼
+                        </span>
+                        <span class="badge bg-danger fs-6">-{{ product.discount_percentage }}%</span>
+                    </div>
+                    <div class="current-price mb-2">
+                        <span class="fs-1 fw-bold text-primary">{{ product.discounted_price }} ₼</span>
+                    </div>
+                    <div class="savings text-success">
+                        <i class="bi bi-piggy-bank me-2"></i>
+                        {% trans 'Qənaət:' %} {{ product.get_savings_amount }} ₼
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="actions mb-4">
+                    <div class="d-flex gap-3">
+                        <button class="btn btn-primary btn-lg flex-fill" onclick="window.open('{{ product.store.website }}', '_blank')">
+                            <i class="bi bi-shop me-2"></i>{% trans 'Mağazaya get' %}
+                        </button>
+                        
+                        <button class="btn btn-outline-danger btn-lg favorite-btn" 
+                                data-product-id="{{ product.id }}" 
+                                data-is-favorite="{% if is_favorite %}true{% else %}false{% endif %}">
+                            <i class="bi bi-heart{% if is_favorite %}-fill{% endif %}"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product Details -->
+                <div class="product-details">
+                    {% if product.short_description %}
+                    <div class="mb-3">
+                        <h6>{% trans 'Qısa təsvir' %}</h6>
+                        <p class="text-muted">{{ product.short_description }}</p>
+                    </div>
+                    {% endif %}
+
+                    {% if product.brand or product.model %}
+                    <div class="row mb-3">
+                        {% if product.brand %}
+                        <div class="col-6">
+                            <strong>{% trans 'Marka:' %}</strong>
+                            <span class="text-muted">{{ product.brand }}</span>
+                        </div>
+                        {% endif %}
+                        {% if product.model %}
+                        <div class="col-6">
+                            <strong>{% trans 'Model:' %}</strong>
+                            <span class="text-muted">{{ product.model }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+
+                    {% if product.sku %}
+                    <div class="mb-3">
+                        <strong>{% trans 'SKU:' %}</strong>
+                        <span class="text-muted">{{ product.sku }}</span>
+                    </div>
+                    {% endif %}
+
+                    {% if product.expires_at %}
+                    <div class="mb-3">
+                        <strong>{% trans 'Bitmə tarixi:' %}</strong>
+                        <span class="text-muted">{{ product.expires_at|date:"d.m.Y H:i" }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Description -->
+    {% if product.description %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">{% trans 'Məhsul haqqında' %}</h5>
+                </div>
+                <div class="card-body">
+                    {{ product.description|linebreaks }}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Related Products -->
+    {% if related_products %}
+    <div class="row mt-5">
+        <div class="col-12">
+            <h3 class="mb-4">{% trans 'Oxşar məhsullar' %}</h3>
+            <div class="row">
+                {% for related_product in related_products %}
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                    <div class="card h-100 product-card">
+                        <div class="position-relative">
+                            <img src="{{ related_product.main_image.url }}" class="card-img-top" alt="{{ related_product.name }}"
+                                 style="height: 200px; object-fit: cover;">
+                            <div class="position-absolute top-0 start-0 m-2">
+                                <span class="badge bg-danger fs-6">-{{ related_product.discount_percentage }}%</span>
+                            </div>
+                        </div>
+                        
+                        <div class="card-body d-flex flex-column">
+                            <h6 class="card-title">{{ related_product.name|truncatechars:50 }}</h6>
+                            
+                            <div class="mt-auto">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="text-decoration-line-through text-muted">
+                                        {{ related_product.original_price }} ₼
+                                    </span>
+                                    <span class="fw-bold text-primary">
+                                        {{ related_product.discounted_price }} ₼
+                                    </span>
+                                </div>
+                                
+                                <a href="{{ related_product.get_absolute_url }}" class="btn btn-primary btn-sm w-100">
+                                    {% trans 'Ətraflı' %}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Thumbnail image click functionality
+    const thumbnailImages = document.querySelectorAll('.thumbnail-img');
+    const mainImage = document.getElementById('mainImage');
+    
+    thumbnailImages.forEach(thumb => {
+        thumb.addEventListener('click', function() {
+            // Update main image
+            mainImage.src = this.dataset.src;
+            
+            // Update active thumbnail
+            thumbnailImages.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+    
+    // Favorite functionality
+    const favoriteBtn = document.querySelector('.favorite-btn');
+    if (favoriteBtn) {
+        favoriteBtn.addEventListener('click', function() {
+            const productId = this.dataset.productId;
+            const isFavorite = this.dataset.isFavorite === 'true';
+            
+            toggleFavorite(productId, isFavorite, this);
+        });
+    }
+});
+
+function toggleFavorite(productId, isFavorite, button) {
+    const icon = button.querySelector('i');
+    
+    // Show loading state
+    button.disabled = true;
+    button.classList.add('loading');
+    
+    fetch('{% url "deals:toggle_favorite" %}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        },
+        body: JSON.stringify({ product_id: productId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            if (data.is_favorite) {
+                button.dataset.isFavorite = 'true';
+                icon.classList.remove('bi-heart');
+                icon.classList.add('bi-heart-fill');
+            } else {
+                button.dataset.isFavorite = 'false';
+                icon.classList.remove('bi-heart-fill');
+                icon.classList.add('bi-heart');
+            }
+            showAlert(data.message, 'success');
+        } else {
+            showAlert(data.message, 'danger');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showAlert('Xəta baş verdi', 'danger');
+    })
+    .finally(() => {
+        button.disabled = false;
+        button.classList.remove('loading');
+    });
+}
+
+function showAlert(message, type = 'info') {
+    const alertContainer = document.createElement('div');
+    alertContainer.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+    alertContainer.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+    
+    alertContainer.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    
+    document.body.appendChild(alertContainer);
+    
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        if (alertContainer.parentNode) {
+            alertContainer.remove();
+        }
+    }, 5000);
+}
+</script>
+
+<style>
+.thumbnail-img {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+}
+
+.thumbnail-img:hover {
+    transform: scale(1.1);
+}
+
+.thumbnail-img.active {
+    border-color: var(--primary-color);
+    transform: scale(1.1);
+}
+
+.current-price {
+    color: var(--primary-color);
+}
+
+.savings {
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.product-details strong {
+    color: var(--dark-color);
+}
+
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+</style>
+{% endblock %}

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <!-- Homepage -->
+    <url>
+        <loc>https://{{ domain }}/</loc>
+        <lastmod>{% now "Y-m-d" %}</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1.0</priority>
+    </url>
+    
+    <!-- Core Pages -->
+    <url>
+        <loc>https://{{ domain }}/about/</loc>
+        <lastmod>{% now "Y-m-d" %}</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <url>
+        <loc>https://{{ domain }}/contact/</loc>
+        <lastmod>{% now "Y-m-d" %}</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <!-- Product List -->
+    <url>
+        <loc>https://{{ domain }}/deals/</loc>
+        <lastmod>{% now "Y-m-d" %}</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.9</priority>
+    </url>
+    
+    <!-- Hot Deals -->
+    <url>
+        <loc>https://{{ domain }}/deals/hot-deals/</loc>
+        <lastmod>{% now "Y-m-d" %}</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.9</priority>
+    </url>
+    
+    <!-- Featured Products -->
+    <url>
+        <loc>https://{{ domain }}/deals/featured/</loc>
+        <lastmod>{% now "Y-m-d" %}</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.9</priority>
+    </url>
+    
+    <!-- Categories -->
+    {% for category in categories %}
+    <url>
+        <loc>https://{{ domain }}{{ category.get_absolute_url }}</loc>
+        <lastmod>{{ category.updated_at|date:"Y-m-d" }}</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    {% endfor %}
+    
+    <!-- Products -->
+    {% for product in products %}
+    <url>
+        <loc>https://{{ domain }}{{ product.get_absolute_url }}</loc>
+        <lastmod>{{ product.updated_at|date:"Y-m-d" }}</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    {% endfor %}
+</urlset>

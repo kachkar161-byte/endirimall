@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block title %}{% trans 'Qeydiyyat' %}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3 class="mb-0">
+                        <i class="bi bi-person-plus me-2"></i>{% trans 'Qeydiyyat' %}
+                    </h3>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.first_name|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.last_name|as_crispy_field }}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form.username|as_crispy_field }}
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form.email|as_crispy_field }}
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form.password1|as_crispy_field }}
+                        </div>
+                        
+                        <div class="mb-4">
+                            {{ form.password2|as_crispy_field }}
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-person-plus me-2"></i>{% trans 'Qeydiyyatdan keç' %}
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <hr class="my-4">
+                    
+                    <div class="text-center">
+                        <p class="mb-0">
+                            {% trans 'Artıq hesabınız var?' %}
+                            <a href="{% url 'accounts:signin' %}" class="text-decoration-none">
+                                {% trans 'Daxil olun' %}
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Benefits -->
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-primary mb-3">
+                                <i class="bi bi-star-fill me-2"></i>{% trans 'Endirimall üstünlükləri' %}
+                            </h5>
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <i class="bi bi-heart text-danger fs-3 mb-2"></i>
+                                    <h6>{% trans 'Sevimli məhsullar' %}</h6>
+                                    <small class="text-muted">{% trans 'Sevimli məhsullarınızı saxlayın' %}</small>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <i class="bi bi-bell text-warning fs-3 mb-2"></i>
+                                    <h6>{% trans 'Bildirişlər' %}</h6>
+                                    <small class="text-muted">{% trans 'Yeni endirimlərdən xəbərdar olun' %}</small>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <i class="bi bi-shield-check text-success fs-3 mb-2"></i>
+                                    <h6>{% trans 'Təhlükəsizlik' %}</h6>
+                                    <small class="text-muted">{% trans 'Şəxsi məlumatlarınız qorunur' %}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.card {
+    border: none;
+    border-radius: 15px;
+}
+
+.card-header {
+    border-radius: 15px 15px 0 0 !important;
+    border: none;
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.btn-primary {
+    border-radius: 10px;
+    padding: 12px;
+    font-weight: 600;
+}
+
+.benefits-icon {
+    transition: transform 0.3s ease;
+}
+
+.benefits-icon:hover {
+    transform: scale(1.1);
+}
+</style>
+{% endblock %}

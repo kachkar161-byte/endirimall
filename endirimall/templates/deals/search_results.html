@@ -1,0 +1,339 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Search Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-light">
+                <div class="card-body text-center">
+                    <h2 class="mb-3">
+                        <i class="bi bi-search me-2"></i>{% trans 'Axtarış Nəticələri' %}
+                    </h2>
+                    
+                    {% if query %}
+                    <div class="search-query mb-3">
+                        <span class="badge bg-primary fs-6">
+                            {% trans 'Axtarış:' %} "{{ query }}"
+                        </span>
+                    </div>
+                    
+                    <div class="search-stats">
+                        <p class="text-muted mb-0">
+                            {% if page_obj %}
+                                {{ page_obj.paginator.count }} {% trans 'nəticə tapıldı' %}
+                            {% else %}
+                                {% trans 'Heç bir nəticə tapılmadı' %}
+                            {% endif %}
+                        </p>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Search Form -->
+                    <form method="GET" action="{% url 'deals:search' %}" class="mt-4">
+                        <div class="row justify-content-center">
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <input type="search" name="q" class="form-control form-control-lg" 
+                                           placeholder="{% trans 'Məhsul, mağaza və ya kateqoriya axtarın...' %}" 
+                                           value="{{ query }}" required>
+                                    <button class="btn btn-primary btn-lg" type="submit">
+                                        <i class="bi bi-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Results -->
+    {% if page_obj %}
+    <div class="row">
+        <div class="col-12">
+            <h3 class="mb-4">{% trans 'Tapılan Məhsullar' %}</h3>
+            
+            <div class="row">
+                {% for product in page_obj %}
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                    <div class="card h-100 product-card">
+                        <div class="position-relative">
+                            <img src="{{ product.main_image.url }}" class="card-img-top" alt="{{ product.name }}"
+                                 style="height: 200px; object-fit: cover;">
+                            <div class="position-absolute top-0 start-0 m-2">
+                                <span class="badge bg-danger fs-6">-{{ product.discount_percentage }}%</span>
+                            </div>
+                            <div class="position-absolute top-0 end-0 m-2">
+                                <button class="btn btn-sm btn-outline-light favorite-btn" 
+                                        data-product-id="{{ product.id }}" 
+                                        data-is-favorite="{% if user.is_authenticated and product in user.favorite_set.all %}true{% else %}false{% endif %}">
+                                    <i class="bi bi-heart{% if user.is_authenticated and product in user.favorite_set.all %}-fill text-danger{% endif %}"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="card-body d-flex flex-column">
+                            <h6 class="card-title">{{ product.name|truncatechars:50 }}</h6>
+                            <p class="card-text text-muted small">{{ product.short_description|truncatechars:80 }}</p>
+                            
+                            <div class="mt-auto">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="text-decoration-line-through text-muted">
+                                        {{ product.original_price }} ₼
+                                    </span>
+                                    <span class="fw-bold text-primary fs-5">
+                                        {{ product.discounted_price }} ₼
+                                    </span>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <small class="text-muted">{{ product.store.name }}</small>
+                                    <small class="text-muted">{{ product.category.name }}</small>
+                                </div>
+                                
+                                <a href="{{ product.get_absolute_url }}" class="btn btn-primary btn-sm w-100">
+                                    {% trans 'Ətraflı' %}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Pagination -->
+            {% if page_obj.has_other_pages %}
+            <nav aria-label="{% trans 'Axtarış nəticələri səhifələri' %}" class="mt-5">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?q={{ query }}&page=1">
+                            <i class="bi bi-chevron-double-left"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?q={{ query }}&page={{ page_obj.previous_page_number }}">
+                            <i class="bi bi-chevron-left"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?q={{ query }}&page={{ num }}">
+                                {{ num }}
+                            </a>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?q={{ query }}&page={{ page_obj.next_page_number }}">
+                            <i class="bi bi-chevron-right"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?q={{ query }}&page={{ page_obj.paginator.num_pages }}">
+                            <i class="bi bi-chevron-double-right"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+    
+    {% else %}
+    <!-- No Results -->
+    <div class="row">
+        <div class="col-12">
+            <div class="text-center py-5">
+                <i class="bi bi-search text-muted" style="font-size: 4rem;"></i>
+                <h3 class="mt-3">{% trans 'Heç bir nəticə tapılmadı' %}</h3>
+                <p class="text-muted mb-4">
+                    {% trans 'Axtardığınız kriteriyalara uyğun məhsul tapılmadı. Zəhmət olmasa:' %}
+                </p>
+                
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="card-title">{% trans 'Axtarış təklifləri:' %}</h6>
+                                <ul class="list-unstyled">
+                                    <li><i class="bi bi-check-circle text-success me-2"></i>{% trans 'Daha ümumi açar sözlər istifadə edin' %}</li>
+                                    <li><i class="bi bi-check-circle text-success me-2"></i>{% trans 'Yazım xətalarını yoxlayın' %}</li>
+                                    <li><i class="bi bi-check-circle text-success me-2"></i>{% trans 'Sinonimlər istifadə edin' %}</li>
+                                    <li><i class="bi bi-check-circle text-success me-2"></i>{% trans 'Məhsul kateqoriyasını dəyişdirin' %}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <a href="{% url 'deals:product_list' %}" class="btn btn-primary me-3">
+                        <i class="bi bi-grid me-2"></i>{% trans 'Bütün məhsullara bax' %}
+                    </a>
+                    <a href="{% url 'core:home' %}" class="btn btn-outline-primary">
+                        <i class="bi bi-house me-2"></i>{% trans 'Ana səhifəyə qayıt' %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    <!-- Search Suggestions -->
+    {% if query %}
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="bi bi-lightbulb me-2"></i>{% trans 'Axtarış təklifləri' %}
+                    </h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>{% trans 'Populyar axtarışlar:' %}</h6>
+                            <div class="d-flex flex-wrap gap-2">
+                                <a href="?q=telefon" class="badge bg-primary text-decoration-none">telefon</a>
+                                <a href="?q=laptop" class="badge bg-primary text-decoration-none">laptop</a>
+                                <a href="?q=giyim" class="badge bg-primary text-decoration-none">giyim</a>
+                                <a href="?q=ev" class="badge bg-primary text-decoration-none">ev</a>
+                                <a href="?q=idman" class="badge bg-primary text-decoration-none">idman</a>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>{% trans 'Populyar mağazalar:' %}</h6>
+                            <div class="d-flex flex-wrap gap-2">
+                                <a href="?q=store:kontakt" class="badge bg-success text-decoration-none">Kontakt</a>
+                                <a href="?q=store:evim" class="badge bg-success text-decoration-none">Evim</a>
+                                <a href="?q=store:bravo" class="badge bg-success text-decoration-none">Bravo</a>
+                                <a href="?q=store:metro" class="badge bg-success text-decoration-none">Metro</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Favorite functionality
+    const favoriteBtns = document.querySelectorAll('.favorite-btn');
+    favoriteBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const productId = this.dataset.productId;
+            const isFavorite = this.dataset.isFavorite === 'true';
+            
+            toggleFavorite(productId, isFavorite, this);
+        });
+    });
+});
+
+function toggleFavorite(productId, isFavorite, button) {
+    const icon = button.querySelector('i');
+    
+    // Show loading state
+    button.disabled = true;
+    button.classList.add('loading');
+    
+    fetch('{% url "deals:toggle_favorite" %}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        },
+        body: JSON.stringify({ product_id: productId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            if (data.is_favorite) {
+                button.dataset.isFavorite = 'true';
+                icon.classList.remove('bi-heart');
+                icon.classList.add('bi-heart-fill', 'text-danger');
+            } else {
+                button.dataset.isFavorite = 'false';
+                icon.classList.remove('bi-heart-fill', 'text-danger');
+                icon.classList.add('bi-heart');
+            }
+            showAlert(data.message, 'success');
+        } else {
+            showAlert(data.message, 'danger');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showAlert('Xəta baş verdi', 'danger');
+    })
+    .finally(() => {
+        button.disabled = false;
+        button.classList.remove('loading');
+    });
+}
+
+function showAlert(message, type = 'info') {
+    const alertContainer = document.createElement('div');
+    alertContainer.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+    alertContainer.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+    
+    alertContainer.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    
+    document.body.appendChild(alertContainer);
+    
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        if (alertContainer.parentNode) {
+            alertContainer.remove();
+        }
+    }, 5000);
+}
+</script>
+
+<style>
+.search-query .badge {
+    font-size: 1rem;
+    padding: 10px 15px;
+}
+
+.search-stats {
+    font-size: 1.1rem;
+}
+
+.search-suggestions .badge {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.search-suggestions .badge:hover {
+    transform: scale(1.1);
+}
+
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+</style>
+{% endblock %}

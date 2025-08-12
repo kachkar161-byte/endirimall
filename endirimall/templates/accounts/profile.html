@@ -1,0 +1,206 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans 'Profil' %}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <!-- Profile Sidebar -->
+        <div class="col-lg-3 mb-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <div class="profile-avatar mb-3">
+                        <i class="bi bi-person-circle text-primary" style="font-size: 4rem;"></i>
+                    </div>
+                    <h5 class="card-title">{{ user.get_full_name|default:user.username }}</h5>
+                    <p class="text-muted">@{{ user.username }}</p>
+                    <p class="text-muted small">
+                        <i class="bi bi-calendar me-1"></i>
+                        {% trans 'Qoşulub:' %} {{ user.date_joined|date:"d.m.Y" }}
+                    </p>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a href="{% url 'accounts:profile' %}" class="list-group-item list-group-item-action active">
+                        <i class="bi bi-person me-2"></i>{% trans 'Profil' %}
+                    </a>
+                    <a href="{% url 'deals:favorite_list' %}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-heart me-2"></i>{% trans 'Sevimlilər' %}
+                    </a>
+                    <a href="{% url 'accounts:profile_edit' %}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-pencil me-2"></i>{% trans 'Profili redaktə et' %}
+                    </a>
+                    <a href="{% url 'accounts:change_password' %}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-key me-2"></i>{% trans 'Şifrəni dəyişdir' %}
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Content -->
+        <div class="col-lg-9">
+            <!-- Profile Information -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="bi bi-person me-2"></i>{% trans 'Profil Məlumatları' %}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">{% trans 'Ad' %}</label>
+                            <p class="text-muted">{{ user.first_name|default:"Daxil edilməyib" }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">{% trans 'Soyad' %}</label>
+                            <p class="text-muted">{{ user.last_name|default:"Daxil edilməyib" }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">{% trans 'İstifadəçi adı' %}</label>
+                            <p class="text-muted">{{ user.username }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">{% trans 'Email' %}</label>
+                            <p class="text-muted">{{ user.email }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">{% trans 'Qoşulma tarixi' %}</label>
+                            <p class="text-muted">{{ user.date_joined|date:"d.m.Y H:i" }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">{% trans 'Son daxil olma' %}</label>
+                            <p class="text-muted">{{ user.last_login|date:"d.m.Y H:i"|default:"Heç vaxt" }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="text-end">
+                        <a href="{% url 'accounts:profile_edit' %}" class="btn btn-primary">
+                            <i class="bi bi-pencil me-2"></i>{% trans 'Profili redaktə et' %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics -->
+            <div class="row mb-4">
+                <div class="col-md-4 mb-3">
+                    <div class="card bg-primary text-white text-center">
+                        <div class="card-body">
+                            <i class="bi bi-heart fs-1 mb-2"></i>
+                            <h4 class="mb-1">{{ user.favorite_set.count }}</h4>
+                            <p class="mb-0">{% trans 'Sevimli məhsul' %}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card bg-success text-white text-center">
+                        <div class="card-body">
+                            <i class="bi bi-eye fs-1 mb-2"></i>
+                            <h4 class="mb-1">{{ user.productview_set.count }}</h4>
+                            <p class="mb-0">{% trans 'Baxılan məhsul' %}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card bg-info text-white text-center">
+                        <div class="card-body">
+                            <i class="bi bi-calendar-check fs-1 mb-2"></i>
+                            <h4 class="mb-1">{{ user.date_joined|timesince }}</h4>
+                            <p class="mb-0">{% trans 'Üzv olma müddəti' %}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Favorites -->
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="bi bi-heart me-2"></i>{% trans 'Son Sevimlilər' %}
+                    </h5>
+                    <a href="{% url 'deals:favorite_list' %}" class="btn btn-outline-primary btn-sm">
+                        {% trans 'Hamısına bax' %}
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% if user.favorite_set.all %}
+                    <div class="row">
+                        {% for favorite in user.favorite_set.all|slice:":4" %}
+                        <div class="col-md-6 col-lg-3 mb-3">
+                            <div class="card h-100 product-card">
+                                <div class="position-relative">
+                                    <img src="{{ favorite.product.main_image.url }}" class="card-img-top" 
+                                         alt="{{ favorite.product.name }}" style="height: 150px; object-fit: cover;">
+                                    <div class="position-absolute top-0 start-0 m-2">
+                                        <span class="badge bg-danger">-{{ favorite.product.discount_percentage }}%</span>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="card-title">{{ favorite.product.name|truncatechars:30 }}</h6>
+                                    <p class="text-primary fw-bold">{{ favorite.product.discounted_price }} ₼</p>
+                                    <a href="{{ favorite.product.get_absolute_url }}" class="btn btn-primary btn-sm w-100">
+                                        {% trans 'Ətraflı' %}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="text-center py-4">
+                        <i class="bi bi-heart text-muted" style="font-size: 3rem;"></i>
+                        <p class="text-muted mt-2">{% trans 'Hələ heç bir sevimli məhsulunuz yoxdur' %}</p>
+                        <a href="{% url 'deals:product_list' %}" class="btn btn-primary">
+                            {% trans 'Məhsullara bax' %}
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.profile-avatar {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--light-color);
+    border-radius: 50%;
+}
+
+.list-group-item.active {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.list-group-item:hover {
+    background-color: var(--light-color);
+}
+
+.statistics-card {
+    transition: transform 0.3s ease;
+}
+
+.statistics-card:hover {
+    transform: translateY(-5px);
+}
+
+.product-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+</style>
+{% endblock %}

@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans 'Gizlilik Siyasəti' %}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Header -->
+            <div class="text-center mb-5">
+                <h1 class="display-4 fw-bold text-primary mb-3">
+                    {% trans 'Gizlilik Siyasəti' %}
+                </h1>
+                <p class="lead text-muted">
+                    {% trans 'Son yenilənmə:' %} {% now "d.m.Y" %}
+                </p>
+            </div>
+
+            <!-- Content -->
+            <div class="card border-0 shadow">
+                <div class="card-body p-4">
+                    <div class="privacy-content">
+                        <section class="mb-4">
+                            <h3>{% trans '1. Ümumi Məlumat' %}</h3>
+                            <p>
+                                {% trans 'Endirimall platforması olaraq, istifadəçilərimizin gizliliyini qorumaq bizim üçün çox vacibdir. Bu gizlilik siyasəti, platformamızda toplanan məlumatların necə istifadə edildiyini və qorunduğunu izah edir.' %}
+                            </p>
+                        </section>
+
+                        <section class="mb-4">
+                            <h3>{% trans '2. Toplanan Məlumatlar' %}</h3>
+                            <p>{% trans 'Platformamızda aşağıdakı məlumatlar toplanır:' %}</p>
+                            <ul>
+                                <li>{% trans 'Şəxsi məlumatlar (ad, soyad, email, telefon)' %}</li>
+                                <li>{% trans 'İstifadəçi hesab məlumatları' %}</li>
+                                <li>{% trans 'Axtarış məlumatları' %}</li>
+                                <li>{% trans 'Sevimli məhsullar' %}</li>
+                                <li>{% trans 'Platforma istifadə statistikaları' %}</li>
+                            </ul>
+                        </section>
+
+                        <section class="mb-4">
+                            <h3>{% trans '3. Məlumatların İstifadəsi' %}</h3>
+                            <p>{% trans 'Toplanan məlumatlar aşağıdakı məqsədlər üçün istifadə edilir:' %}</p>
+                            <ul>
+                                <li>{% trans 'Platforma xidmətlərini təmin etmək' %}</li>
+                                <li>{% trans 'İstifadəçi təcrübəsini yaxşılaşdırmaq' %}</li>
+                                <li>{% trans 'Endirim təkliflərini fərdiləşdirmək' %}</li>
+                                <li>{% trans 'Texniki dəstək göstərmək' %}</li>
+                                <li>{% trans 'Platforma təhlükəsizliyini təmin etmək' %}</li>
+                            </ul>
+                        </section>
+
+                        <section class="mb-4">
+                            <h3>{% trans '4. Məlumatların Paylaşılması' %}</h3>
+                            <p>
+                                {% trans 'İstifadəçi məlumatları üçüncü tərəflərlə paylaşılmır, yalnız aşağıdakı hallarda:' %}
+                            </p>
+                            <ul>
+                                <li>{% trans 'İstifadəçi razılığı olduqda' %}</li>
+                                <li>{% trans 'Qanuni tələb olduqda' %}</li>
+                                <li>{% trans 'Platforma təhlükəsizliyi üçün zəruri olduqda' %}</li>
+                            </ul>
+                        </section>
+
+                        <section class="mb-4">
+                            <h3>{% trans '5. Məlumatların Qorunması' %}</h3>
+                            <p>
+                                {% trans 'İstifadəçi məlumatları aşağıdakı üsullarla qorunur:' %}
+                            </p>
+                            <ul>
+                                <li>{% trans 'SSL şifrələmə' %}</li>
+                                <li>{% trans 'Güclü şifrə siyasəti' %}</li>
+                                <li>{% trans 'Müntəzəm təhlükəsizlik yoxlamaları' %}</li>
+                                <li>{% trans 'Məlumat bazası şifrələməsi' %}</li>
+                            </ul>
+                        </section>
+
+                        <section class="mb-4">
+                            <h3>{% trans '6. İstifadəçi Hüquqları' %}</h3>
+                            <p>{% trans 'İstifadəçilər aşağıdakı hüquqlara malikdir:' %}</p>
+                            <ul>
+                                <li>{% trans 'Şəxsi məlumatlarına daxil olmaq' %}</li>
+                                <li>{% trans 'Məlumatları yeniləmək və ya düzəltmək' %}</li>
+                                <li>{% trans 'Məlumatları silmək' %}</li>
+                                <li>{% trans 'Məlumat toplamağa etiraz etmək' %}</li>
+                                <li>{% trans 'Məlumatları portativ formatda almaq' %}</li>
+                            </ul>
+                        </section>
+
+                        <section class="mb-4">
+                            <h3>{% trans '7. Çərəzlər (Cookies)' %}</h3>
+                            <p>
+                                {% trans 'Platformamız istifadəçi təcrübəsini yaxşılaşdırmaq üçün çərəzlərdən istifadə edir. Çərəzlər aşağıdakı məqsədlər üçün istifadə edilir:' %}
+                            </p>
+                            <ul>
+                                <li>{% trans 'Sessiya idarəetməsi' %}</li>
+                                <li>{% trans 'İstifadəçi tərcihləri' %}</li>
+                                <li>{% trans 'Analitika və statistikalar' %}</li>
+                                <li>{% trans 'Təhlükəsizlik' %}</li>
+                            </ul>
+                        </section>
+
+                        <section class="mb-4">
+                            <h3>{% trans '8. Uşaq Məlumatları' %}</h3>
+                            <p>
+                                {% trans 'Platformamız 13 yaşından kiçik uşaqlardan şəxsi məlumat toplamır. Əgər belə məlumat toplandığını bilirsinizsə, bizimlə əlaqə saxlayın.' %}
+                            </p>
+                        </section>
+
+                        <section class="mb-4">
+                            <h3>{% trans '9. Beynəlxalq Məlumat Köçürülməsi' %}</h3>
+                            <p>
+                                {% trans 'Məlumatlar Azərbaycan Respublikasında saxlanılır və işlənir. Beynəlxalq köçürülmə hallarında müvafiq təhlükəsizlik tədbirləri tətbiq edilir.' %}
+                            </p>
+                        </section>
+
+                        <section class="mb-4">
+                            <h3>{% trans '10. Gizlilik Siyasəti Dəyişiklikləri' %}</h3>
+                            <p>
+                                {% trans 'Bu gizlilik siyasəti vaxtaşırı yenilənə bilər. Dəyişikliklər platformada elan ediləcək və istifadəçilər məlumatlandırılacaq.' %}
+                            </p>
+                        </section>
+
+                        <section class="mb-4">
+                            <h3>{% trans '11. Əlaqə' %}</h3>
+                            <p>
+                                {% trans 'Gizlilik siyasəti ilə bağlı suallarınız üçün bizimlə əlaqə saxlayın:' %}
+                            </p>
+                            <ul>
+                                <li>{% trans 'Email:' %} <a href="mailto:privacy@endirimall.az">privacy@endirimall.az</a></li>
+                                <li>{% trans 'Telefon:' %} <a href="tel:+994501234567">+994 50 123 45 67</a></li>
+                                <li>{% trans 'Ünvan:' %} {% trans 'Bakı şəhəri, Nərimanov rayonu, Atatürk prospekti 123' %}</li>
+                            </ul>
+                        </section>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact CTA -->
+            <div class="text-center mt-5">
+                <p class="text-muted mb-3">
+                    {% trans 'Gizlilik siyasəti ilə bağlı suallarınız var?' %}
+                </p>
+                <a href="{% url 'core:contact' %}" class="btn btn-primary">
+                    <i class="bi bi-envelope me-2"></i>{% trans 'Bizimlə Əlaqə' %}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.privacy-content h3 {
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--light-color);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.privacy-content ul {
+    padding-left: 1.5rem;
+}
+
+.privacy-content li {
+    margin-bottom: 0.5rem;
+}
+
+.card {
+    border-radius: 15px;
+}
+
+.privacy-content a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.privacy-content a:hover {
+    text-decoration: underline;
+}
+</style>
+{% endblock %}

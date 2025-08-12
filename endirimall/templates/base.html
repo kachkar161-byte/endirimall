@@ -1,0 +1,275 @@
+{% load static %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE|default:'az' }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{% block meta_description %}Endirimall - Azərbaycanda ən yaxşı endirimlər və endirim kodları{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}endirim, endirim kodu, azərbaycan, mağaza, məhsul{% endblock %}">
+    <meta name="author" content="Endirimall">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:title" content="{% block og_title %}{{ page_title|default:'Endirimall' }}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{{ meta_description }}{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{% endblock %}">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ request.build_absolute_uri }}">
+    <meta property="twitter:title" content="{% block twitter_title %}{{ page_title|default:'Endirimall' }}{% endblock %}">
+    <meta property="twitter:description" content="{% block twitter_description %}{{ meta_description }}{% endblock %}">
+    <meta property="twitter:image" content="{% block twitter_image %}{% endblock %}">
+    
+    <title>{% block title %}{{ page_title|default:'Endirimall - Ən yaxşı endirimlər' }}{% endblock %}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="{% load static %}{% static 'css/style.css' %}" rel="stylesheet">
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Header -->
+    <header class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+        <div class="container">
+            <!-- Logo -->
+            <a class="navbar-brand fw-bold" href="{% url 'core:home' %}">
+                <i class="bi bi-tags-fill me-2"></i>Endirimall
+            </a>
+            
+            <!-- Mobile Toggle -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <!-- Navigation -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'core:home' %}">
+                            <i class="bi bi-house-door me-1"></i>{% trans 'Ana Səhifə' %}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'deals:product_list' %}">
+                            <i class="bi bi-grid me-1"></i>{% trans 'Bütün Endirimlər' %}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'deals:hot_deals' %}">
+                            <i class="bi bi-fire me-1"></i>{% trans 'Hot Deals' %}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'deals:featured_products' %}">
+                            <i class="bi bi-star me-1"></i>{% trans 'Seçilmiş' %}
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-list me-1"></i>{% trans 'Kateqoriyalar' %}
+                        </a>
+                        <ul class="dropdown-menu">
+                            {% for category in categories|slice:":10" %}
+                            <li><a class="dropdown-item" href="{{ category.get_absolute_url }}">{{ category.name }}</a></li>
+                            {% endfor %}
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'deals:product_list' %}">{% trans 'Bütün kateqoriyalar' %}</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                <!-- Search Form -->
+                <form class="d-flex me-3" method="GET" action="{% url 'deals:search' %}">
+                    <div class="input-group">
+                        <input class="form-control" type="search" name="q" placeholder="{% trans 'Məhsul axtarın...' %}" 
+                               value="{{ request.GET.q }}" aria-label="Search">
+                        <button class="btn btn-outline-light" type="submit">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </form>
+                
+                <!-- Language Switcher -->
+                <div class="dropdown me-3">
+                    <button class="btn btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-globe me-1"></i>{{ LANGUAGE_CODE|upper }}
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'set_language' %}?language=az">Azərbaycan</a></li>
+                        <li><a class="dropdown-item" href="{% url 'set_language' %}?language=en">English</a></li>
+                        <li><a class="dropdown-item" href="{% url 'set_language' %}?language=ru">Русский</a></li>
+                    </ul>
+                </div>
+                
+                <!-- User Menu -->
+                <ul class="navbar-nav">
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'deals:favorite_list' %}">
+                            <i class="bi bi-heart me-1"></i>{% trans 'Sevimlilər' %}
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle me-1"></i>{{ user.username }}
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">
+                                <i class="bi bi-person me-2"></i>{% trans 'Profil' %}
+                            </a></li>
+                            <li><a class="dropdown-item" href="{% url 'accounts:profile_edit' %}">
+                                <i class="bi bi-pencil me-2"></i>{% trans 'Profili redaktə et' %}
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">
+                                <i class="bi bi-box-arrow-right me-2"></i>{% trans 'Çıxış' %}
+                            </a></li>
+                        </ul>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'accounts:signin' %}">
+                            <i class="bi bi-box-arrow-in-right me-1"></i>{% trans 'Daxil ol' %}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'accounts:signup' %}">
+                            <i class="bi bi-person-plus me-1"></i>{% trans 'Qeydiyyat' %}
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- Messages -->
+    {% if messages %}
+    <div class="container mt-3">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main class="flex-grow-1">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5 class="mb-3">
+                        <i class="bi bi-tags-fill me-2"></i>Endirimall
+                    </h5>
+                    <p class="text-muted">
+                        {% trans 'Azərbaycanda ən yaxşı endirimlər və endirim kodları. Ən böyük mağazalardan ən yaxşı qiymətlər.' %}
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="text-light me-3"><i class="bi bi-facebook fs-5"></i></a>
+                        <a href="#" class="text-light me-3"><i class="bi bi-instagram fs-5"></i></a>
+                        <a href="#" class="text-light me-3"><i class="bi bi-twitter fs-5"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-telegram fs-5"></i></a>
+                    </div>
+                </div>
+                
+                <div class="col-md-2 mb-4">
+                    <h6 class="mb-3">{% trans 'Kateqoriyalar' %}</h6>
+                    <ul class="list-unstyled">
+                        {% for category in categories|slice:":5" %}
+                        <li class="mb-2">
+                            <a href="{{ category.get_absolute_url }}" class="text-muted text-decoration-none">
+                                {{ category.name }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                
+                <div class="col-md-2 mb-4">
+                    <h6 class="mb-3">{% trans 'Mağazalar' %}</h6>
+                    <ul class="list-unstyled">
+                        {% for store in stores|slice:":5" %}
+                        <li class="mb-2">
+                            <a href="{{ store.get_absolute_url }}" class="text-muted text-decoration-none">
+                                {{ store.name }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <h6 class="mb-3">{% trans 'Yeniliklərə abunə olun' %}</h6>
+                    <p class="text-muted mb-3">
+                        {% trans 'Ən yaxşı endirimlər haqqında məlumat almaq üçün abunə olun' %}
+                    </p>
+                    <form class="newsletter-form" id="newsletterForm">
+                        <div class="input-group">
+                            <input type="email" class="form-control" id="newsletterEmail" 
+                                   placeholder="{% trans 'Email ünvanınız' %}" required>
+                            <button class="btn btn-primary" type="submit">
+                                <i class="bi bi-send"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <hr class="my-4">
+            
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0 text-muted">
+                        &copy; {% now "Y" %} Endirimall. {% trans 'Bütün hüquqlar qorunur.' %}
+                    </p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item">
+                            <a href="{% url 'core:about' %}" class="text-muted text-decoration-none">
+                                {% trans 'Haqqımızda' %}
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="{% url 'core:contact' %}" class="text-muted text-decoration-none">
+                                {% trans 'Əlaqə' %}
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="{% url 'core:privacy_policy' %}" class="text-muted text-decoration-none">
+                                {% trans 'Gizlilik Siyasəti' %}
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="{% url 'core:terms_of_service' %}" class="text-muted text-decoration-none">
+                                {% trans 'İstifadə Şərtləri' %}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{% static 'js/main.js' %}"></script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
