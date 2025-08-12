@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}{% trans 'Home' %} | Endirimall{% endblock %}
+
+{% block content %}
+    <!-- Slider Placeholder -->
+    <div id="mainCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            {% for slide in slider_images %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <img src="{{ slide.image.url }}" class="d-block w-100" alt="{{ slide.title }}">
+                </div>
+            {% empty %}
+                <div class="carousel-item active">
+                    <img src="https://via.placeholder.com/1200x400?text=Endirimall" class="d-block w-100" alt="Placeholder">
+                </div>
+            {% endfor %}
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+    <!-- Products grid -->
+    <h2 class="mt-5 mb-3">{% trans 'Latest Deals' %}</h2>
+    <div class="row" id="products-container">
+        {% for product in products %}
+            <div class="col-md-3 mb-4">
+                {% include 'deals/_product_card.html' with product=product %}
+            </div>
+        {% empty %}
+            <p>{% trans 'No products found.' %}</p>
+        {% endfor %}
+    </div>
+{% endblock %}

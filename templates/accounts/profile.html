@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}{% trans 'Profile' %} | Endirimall{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>{% trans 'My Profile' %}</h2>
+    <ul class="list-group">
+        <li class="list-group-item"><strong>{% trans 'Username:' %}</strong> {{ user.username }}</li>
+        <li class="list-group-item"><strong>{% trans 'Email:' %}</strong> {{ user.email }}</li>
+    </ul>
+</div>
+{% endblock %}
