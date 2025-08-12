@@ -1,0 +1,219 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-12 12:44+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
+"(n%100>=11 && n%100<=14)? 2 : 3);\n"
+#: accounts/models.py:10 deals/models.py:152
+msgid "User"
+msgstr ""
+
+#: accounts/models.py:11
+msgid "Avatar"
+msgstr ""
+
+#: accounts/models.py:12
+msgid "Phone Number"
+msgstr ""
+
+#: accounts/models.py:13
+msgid "Date of Birth"
+msgstr ""
+
+#: accounts/models.py:14
+msgid "Preferred Language"
+msgstr ""
+
+#: accounts/models.py:17
+msgid "Receive Newsletter"
+msgstr ""
+
+#: accounts/models.py:18 deals/models.py:16 deals/models.py:39
+#: deals/models.py:80 deals/models.py:129 deals/models.py:154
+msgid "Created At"
+msgstr ""
+
+#: accounts/models.py:19 deals/models.py:17 deals/models.py:40
+#: deals/models.py:81
+msgid "Updated At"
+msgstr ""
+
+#: accounts/models.py:22
+msgid "User Profile"
+msgstr ""
+
+#: accounts/models.py:23
+msgid "User Profiles"
+msgstr ""
+
+#: deals/models.py:10
+msgid "Store Name"
+msgstr ""
+
+#: deals/models.py:11 deals/models.py:34 deals/models.py:60
+msgid "Slug"
+msgstr ""
+
+#: deals/models.py:12
+msgid "Logo"
+msgstr ""
+
+#: deals/models.py:13
+msgid "Website URL"
+msgstr ""
+
+#: deals/models.py:14 deals/models.py:37 deals/models.py:61
+msgid "Description"
+msgstr ""
+
+#: deals/models.py:15 deals/models.py:38 deals/models.py:76 deals/models.py:128
+#: marketing/models.py:8
+msgid "Is Active"
+msgstr ""
+
+#: deals/models.py:20 deals/models.py:68
+msgid "Store"
+msgstr ""
+
+#: deals/models.py:21
+msgid "Stores"
+msgstr ""
+
+#: deals/models.py:33
+msgid "Category Name"
+msgstr ""
+
+#: deals/models.py:35
+msgid "Icon Class"
+msgstr ""
+
+#: deals/models.py:36
+msgid "Bootstrap icon class (e.g., bi-laptop)"
+msgstr ""
+
+#: deals/models.py:43 deals/models.py:69
+msgid "Category"
+msgstr ""
+
+#: deals/models.py:44
+msgid "Categories"
+msgstr ""
+
+#: deals/models.py:59
+msgid "Product Title"
+msgstr ""
+
+#: deals/models.py:62
+msgid "Product Image"
+msgstr ""
+
+#: deals/models.py:63
+msgid "Original Price"
+msgstr ""
+
+#: deals/models.py:64
+msgid "Discounted Price"
+msgstr ""
+
+#: deals/models.py:65
+msgid "Discount Percentage"
+msgstr ""
+
+#: deals/models.py:72
+msgid "Deal URL"
+msgstr ""
+
+#: deals/models.py:72
+msgid "Link to the actual deal"
+msgstr ""
+
+#: deals/models.py:73
+msgid "Valid Until"
+msgstr ""
+
+#: deals/models.py:77
+msgid "Is Featured"
+msgstr ""
+
+#: deals/models.py:84 deals/models.py:153
+msgid "Product"
+msgstr ""
+
+#: deals/models.py:85
+msgid "Products"
+msgstr ""
+
+#: deals/models.py:123
+msgid "Title"
+msgstr ""
+
+#: deals/models.py:124 deals/models.py:132
+msgid "Slider Image"
+msgstr ""
+
+#: deals/models.py:125
+msgid "Link URL"
+msgstr ""
+
+#: deals/models.py:125
+msgid "URL to redirect when clicked"
+msgstr ""
+
+#: deals/models.py:126
+msgid "Alt Text"
+msgstr ""
+
+#: deals/models.py:126
+msgid "Alternative text for accessibility"
+msgstr ""
+
+#: deals/models.py:127
+msgid "Display Order"
+msgstr ""
+
+#: deals/models.py:133
+msgid "Slider Images"
+msgstr ""
+
+#: deals/models.py:157
+msgid "Favorite"
+msgstr ""
+
+#: deals/models.py:158
+msgid "Favorites"
+msgstr ""
+
+#: marketing/models.py:7
+msgid "Email Address"
+msgstr ""
+
+#: marketing/models.py:9
+msgid "Subscribed At"
+msgstr ""
+
+#: marketing/models.py:10
+msgid "Unsubscribed At"
+msgstr ""
+
+#: marketing/models.py:13
+msgid "Email Subscription"
+msgstr ""
+
+#: marketing/models.py:14
+msgid "Email Subscriptions"
+msgstr ""

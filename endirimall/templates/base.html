@@ -1,0 +1,296 @@
+{% load static %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% trans "Endirimall - Best Deals and Discounts" %}{% endblock %}</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="{% block meta_description %}{% trans "Discover the best deals and discounts from top stores. Save money on electronics, fashion, home goods and more." %}{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}deals, discounts, shopping, sales, offers, endirimall{% endblock %}">
+    <meta name="author" content="Endirimall">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="{% block og_title %}{% trans "Endirimall - Best Deals and Discounts" %}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{% trans "Discover the best deals and discounts from top stores. Save money on electronics, fashion, home goods and more." %}{% endblock %}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:image" content="{% block og_image %}{% static 'images/endirimall-logo.png' %}{% endblock %}">
+    <meta property="og:site_name" content="Endirimall">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}{% trans "Endirimall - Best Deals and Discounts" %}{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}{% trans "Discover the best deals and discounts from top stores." %}{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}{% static 'images/endirimall-logo.png' %}{% endblock %}">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    
+    <!-- Custom CSS -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+        <div class="container">
+            <!-- Brand -->
+            <a class="navbar-brand fw-bold" href="{% url 'core:home' %}">
+                <i class="bi bi-tag-fill me-2"></i>Endirimall
+            </a>
+            
+            <!-- Mobile toggle button -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <!-- Navigation items -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- Left side navigation -->
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'core:home' %}">
+                            <i class="bi bi-house-door me-1"></i>{% trans "Home" %}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'deals:product_list' %}">
+                            <i class="bi bi-grid me-1"></i>{% trans "All Deals" %}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'deals:featured_products' %}">
+                            <i class="bi bi-star me-1"></i>{% trans "Featured" %}
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-list me-1"></i>{% trans "Categories" %}
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'deals:category_list' %}">{% trans "All Categories" %}</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            {% for category in categories %}
+                            <li>
+                                <a class="dropdown-item" href="{{ category.get_absolute_url }}">
+                                    {% if category.icon %}<i class="bi bi-{{ category.icon }} me-2"></i>{% endif %}
+                                    {{ category.name }}
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'deals:store_list' %}">
+                            <i class="bi bi-shop me-1"></i>{% trans "Stores" %}
+                        </a>
+                    </li>
+                </ul>
+                
+                <!-- Search form -->
+                <form class="d-flex me-3" role="search" action="{% url 'deals:search' %}" method="get">
+                    <div class="input-group">
+                        <input class="form-control" type="search" placeholder="{% trans 'Search deals...' %}" 
+                               name="q" value="{{ request.GET.q }}" id="searchInput" autocomplete="off">
+                        <button class="btn btn-outline-light" type="submit">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                    <!-- Search suggestions dropdown -->
+                    <div class="search-suggestions dropdown-menu w-100" id="searchSuggestions"></div>
+                </form>
+                
+                <!-- Right side navigation -->
+                <ul class="navbar-nav">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'deals:favorites' %}">
+                                <i class="bi bi-heart me-1"></i>{% trans "Favorites" %}
+                                {% if user.favorites.count %}
+                                    <span class="badge bg-danger">{{ user.favorites.count }}</span>
+                                {% endif %}
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-person-circle me-1"></i>{{ user.profile.get_full_name }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">
+                                    <i class="bi bi-person me-2"></i>{% trans "Profile" %}
+                                </a></li>
+                                <li><a class="dropdown-item" href="{% url 'accounts:profile_edit' %}">
+                                    <i class="bi bi-gear me-2"></i>{% trans "Settings" %}
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">
+                                    <i class="bi bi-box-arrow-right me-2"></i>{% trans "Logout" %}
+                                </a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'accounts:login' %}">
+                                <i class="bi bi-box-arrow-in-right me-1"></i>{% trans "Login" %}
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'accounts:signup' %}">
+                                <i class="bi bi-person-plus me-1"></i>{% trans "Sign Up" %}
+                            </a>
+                        </li>
+                    {% endif %}
+                    
+                    <!-- Language switcher -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-globe me-1"></i>
+                            {% get_current_language as LANGUAGE_CODE %}
+                            {% if LANGUAGE_CODE == 'en' %}English
+                            {% elif LANGUAGE_CODE == 'az' %}Azərbaycan
+                            {% elif LANGUAGE_CODE == 'ru' %}Русский
+                            {% endif %}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            {% get_available_languages as LANGUAGES %}
+                            {% get_current_language as LANGUAGE_CODE %}
+                            {% for lang_code, lang_name in LANGUAGES %}
+                                {% language lang_code %}
+                                <li>
+                                    <form action="{% url 'set_language' %}" method="post" class="d-inline">
+                                        {% csrf_token %}
+                                        <input name="next" type="hidden" value="{{ request.get_full_path|slice:'3:' }}">
+                                        <input name="language" type="hidden" value="{{ lang_code }}">
+                                        <button type="submit" class="dropdown-item {% if lang_code == LANGUAGE_CODE %}active{% endif %}">
+                                            {{ lang_name }}
+                                        </button>
+                                    </form>
+                                </li>
+                                {% endlanguage %}
+                            {% endfor %}
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Messages -->
+    {% if messages %}
+        <div class="container mt-3">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Main content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light mt-5">
+        <div class="container py-5">
+            <div class="row">
+                <!-- About section -->
+                <div class="col-md-4 mb-4">
+                    <h5 class="fw-bold mb-3">
+                        <i class="bi bi-tag-fill me-2"></i>Endirimall
+                    </h5>
+                    <p class="text-muted">
+                        {% trans "Your ultimate destination for the best deals and discounts. Save money while shopping from top brands and stores." %}
+                    </p>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-light"><i class="bi bi-facebook fs-5"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-twitter fs-5"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-instagram fs-5"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-linkedin fs-5"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Quick links -->
+                <div class="col-md-2 mb-4">
+                    <h6 class="fw-bold mb-3">{% trans "Quick Links" %}</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'core:home' %}" class="text-muted text-decoration-none">{% trans "Home" %}</a></li>
+                        <li><a href="{% url 'deals:product_list' %}" class="text-muted text-decoration-none">{% trans "All Deals" %}</a></li>
+                        <li><a href="{% url 'deals:featured_products' %}" class="text-muted text-decoration-none">{% trans "Featured" %}</a></li>
+                        <li><a href="{% url 'deals:category_list' %}" class="text-muted text-decoration-none">{% trans "Categories" %}</a></li>
+                        <li><a href="{% url 'deals:store_list' %}" class="text-muted text-decoration-none">{% trans "Stores" %}</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Account -->
+                <div class="col-md-2 mb-4">
+                    <h6 class="fw-bold mb-3">{% trans "Account" %}</h6>
+                    <ul class="list-unstyled">
+                        {% if user.is_authenticated %}
+                            <li><a href="{% url 'accounts:profile' %}" class="text-muted text-decoration-none">{% trans "Profile" %}</a></li>
+                            <li><a href="{% url 'deals:favorites' %}" class="text-muted text-decoration-none">{% trans "Favorites" %}</a></li>
+                            <li><a href="{% url 'accounts:logout' %}" class="text-muted text-decoration-none">{% trans "Logout" %}</a></li>
+                        {% else %}
+                            <li><a href="{% url 'accounts:login' %}" class="text-muted text-decoration-none">{% trans "Login" %}</a></li>
+                            <li><a href="{% url 'accounts:signup' %}" class="text-muted text-decoration-none">{% trans "Sign Up" %}</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                
+                <!-- Newsletter -->
+                <div class="col-md-4 mb-4">
+                    <h6 class="fw-bold mb-3">{% trans "Newsletter" %}</h6>
+                    <p class="text-muted">{% trans "Subscribe to get notified about the latest deals and offers." %}</p>
+                    <form id="newsletterForm" class="d-flex">
+                        {% csrf_token %}
+                        <input type="email" class="form-control me-2" placeholder="{% trans 'Your email' %}" 
+                               name="email" required>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-envelope"></i>
+                        </button>
+                    </form>
+                    <div id="newsletterMessage" class="mt-2"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Copyright -->
+        <div class="border-top border-secondary">
+            <div class="container py-3">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <p class="mb-0 text-muted">
+                            &copy; {% now "Y" %} Endirimall. {% trans "All rights reserved." %}
+                        </p>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <small class="text-muted">
+                            {% trans "Made with" %} <i class="bi bi-heart-fill text-danger"></i> {% trans "in Azerbaijan" %}
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="{% static 'js/main.js' %}"></script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
